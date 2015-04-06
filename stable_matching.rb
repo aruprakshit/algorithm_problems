@@ -25,7 +25,7 @@ def man_free? person, match_list
 end
 
 def woman_free? person, match_list
-  match_list.none? { |a| a.first == person }
+  match_list.none? { |a| a.last == person }
 end
 
 Men.each do |man|
