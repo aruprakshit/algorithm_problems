@@ -20,12 +20,18 @@ proposals_of_women = Hash.new { |h, k| h[k] = [] }
 
 perfect_match_list = []
 
+def man_free? person, match_list
+  match_list.none? { |a| a.first == person }
+end
+
+def woman_free? person, match_list
+  match_list.none? { |a| a.first == person }
+end
+
 Men.each do |man|
-  not_engaged_man = perfect_match_list.none? { |a| a.first == man }
-  while not_engaged_man && proposals_of_men[man].size < preference_list_of_men[man].size
+  while man_free?(man, perfect_match_list) && proposals_of_men[man].size < preference_list_of_men[man].size
     woman = (preference_list_of_men[man] - proposals_of_men[man]).each_with_index.min_by(&:last).first
-    not_engaged_woman = perfect_match_list.none? { |a| a.last == woman }
-    if not_engaged_woman
+    if woman_free?(woman, perfect_match_list)
       perfect_match_list << [man, woman]
       proposals_of_women[woman] << man
     else
@@ -38,7 +44,6 @@ Men.each do |man|
     end
 
     proposals_of_men[man] << woman
-    not_engaged_man = perfect_match_list.none? { |a| a.first == man }
   end
 end
 
